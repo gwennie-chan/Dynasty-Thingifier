@@ -6,7 +6,7 @@
 // @include     https://dynasty-scans.com/*
 // @exclude     https://dynasty-scans.com/system/*
 // @exclude     https://dynasty-scans.com/*.json
-// @version     2.242
+// @version     2.243
 // @description Adds post links and quote stuff to Dynasty forums
 // @grant		GM_getValue
 // @grant		GM_listValue
@@ -402,7 +402,6 @@ cursor: pointer !important;
 <li><input type="checkbox" id="thingifier-quote-move-quickreply"> Move quick reply to under quoted post</li>
 <li><input type="checkbox" id="thingifier-magnifier" tooltip="Press Z or middle mouse click"> Magnifier on reader and image pages</li>
 <li><input type="range" id="thingifier-font-size" min="1" max="5"> Change font size <input type="button" id="thingifier-reset-font" value="Reset Font Size"></li>
-<li><a href="https://dynasty-scans.com/forum/posts?user_id=${DT.yourid}" id="thingifier-ownposts"> Your posts</a></li>
 <li><span id="useridinfo">Please navigate to a Forum thread to automatically set your forum user ID.</span></li>
 <li><input type="button" id="thingifier-clear" value="Clear stored data"></li>
 </ul>
@@ -447,19 +446,24 @@ Shape: <input type="radio" id="squareborder" val="square" name="magnifier-shape"
 
         //Setup own posts link stuff - redesigned by gwennie-chan
         if (DT.yourid == "Not set!") {
-            $('#thingifier-ownposts').hide();
             $('#useridinfo').show();
         }
+	else if (DT.yourid.match(/\d+/)) {
+		$('#useridinfo').hide();
+	}
+	else {
+		$('#useridinfo').text("Invalid ID Present");
+		$('#useridinfo').show();
+	}
+	//Check to see if we're on a forum overview page
+	if (pageurl.match(/forum/) || pageurl.match(/forum\?page\=\d/)){
+		if (DT.yourid.match(/\D+/))  {
+			$('.btn-group:nth-of-type(2)').after('<div class="btn-group"><a class="btn" href="' + DT.yourid + '">Your Posts</a></div>');
+		}
 		else if (DT.yourid.match(/\d+/)) {
-			$('#thingifier-ownposts').attr('href', "//dynasty-scans.com/forum/posts?user_id=" + DT.yourid);
-			$('#useridinfo').hide();
-			$('#thingifier-ownposts').show();
+			$('.btn-group:nth-of-type(2)').after('<div class="btn-group"><a class="btn" href="forums/posts?user_id=$' + DT.yourid + '">Your Posts</a></div>');
 		}
-		else {
-			$('#useridinfo').text("Invalid ID Present");
-			$('#useridinfo').show();
-		}
-
+	}
         //Check we're viewing a thread
         if (pageurl.match(/forum\/topics/)) {
             $('.forum_post').each(function() {

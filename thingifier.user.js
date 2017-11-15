@@ -458,10 +458,10 @@ Shape: <input type="radio" id="squareborder" val="square" name="magnifier-shape"
 	//Check to see if we're on a forum overview page
 	if (pageurl.match(/forum/) || pageurl.match(/forum\?page\=\d/)){
 		if (DT.yourid.match(/\D+/))  {
-			$('.btn-group:nth-of-type(2)').after('<div class="btn-group"><a class="btn" href="' + DT.yourid + '">Your Posts</a></div>');
+			$('.btn-group:nth-of-type(2)').after(`<div class="btn-group"><a class="btn" href="${DT.yourid}">Your Posts</a></div>`);
 		}
 		else if (DT.yourid.match(/\d+/)) {
-			$('.btn-group:nth-of-type(2)').after('<div class="btn-group"><a class="btn" href="forums/posts?user_id=$' + DT.yourid + '">Your Posts</a></div>');
+			$('.btn-group:nth-of-type(2)').after(`<div class="btn-group"><a class="btn" href="forums/posts?user_id=${DT.yourid}">Your Posts</a></div>`);
 		}
 	}
         //Check we're viewing a thread
